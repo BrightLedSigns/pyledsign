@@ -1,0 +1,10 @@
+#test files
+t?.py
+test.py
+data.log
+# build directory
+build/
+# bytecode
+*.pyc
+# caches
+__pycache__
