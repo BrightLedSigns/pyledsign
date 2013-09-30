@@ -1,7 +1,7 @@
 import sys, platform
 from platform import python_version
-if sys.hexversion < 0x01060000:
-    sys.stderr.write('Python 2.6 or newer is required, including version 3.\n')
+if sys.hexversion < 0x02030000:
+    sys.stderr.write('Python 2.3 or newer is required, including version 3.\n')
     sys.stderr.write('  You are running version [%s]\n' % python_version())
     sys.exit(1)
   
