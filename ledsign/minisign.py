@@ -9,7 +9,9 @@ class MiniSign(LedSign):
             raise Exception('Invalid value for devicetype [' +this.devicetype+
                 ']');
         this.factory=MiniSignFactory()
-        this.factory.initslots(MiniSign.SLOTRANGE)
+        this.factory.initslots(
+            slotrange=MiniSign.SLOTRANGE
+        )
 
     def _factory(this):
         return this.factory
@@ -122,9 +124,12 @@ class MiniSign(LedSign):
             this.writeserial(barray(packet))
             sleep(params['packetdelay'])
 
-        bits=this.factory.getshowbits()
+        if 'showslots' in params:
+            showslots=params['showslots']
+        else:
+            showslots=None
+        bits=this.factory.getshowbits(showslots)
         if bits != 0:
-            sys.stdout.write('writing runbits packet\n');
             this.writeserial(barray([0x02,0x33,bits]))
         this.serialclose()
 
@@ -253,11 +258,16 @@ class MiniSignFactory(LedSignFactory):
             this.chunkcache[chunk]=retval
         return retval
 
-    def getshowbits(this):
+    def getshowbits(this,showslots):
         BITVALS={1:1, 2:2, 3:4, 4:8, 5:16, 6:32, 7:64, 8:128}
         bits=0
-        for val in this.usedslots:
-            bits+=BITVALS[val]
+        if showslots != None:
+            slotlist=showslots
+        else:   
+            slotlist=this.usedslots
+        for slot in slotlist:
+            sys.stdout.write('adding bitval [%d]\n' %slot)
+            bits+=BITVALS[slot]
         sys.stdout.write('showbits is [%d]\n' % bits)
         return bits
             

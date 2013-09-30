@@ -79,7 +79,8 @@ class LedSignFactory(object):
     def objects(this,objtype):
         return this.objlist[objtype]
 
-    def initslots(this,slotrange):
+    def initslots(this,**params):
+        slotrange=params['slotrange']
         this.slotrange=list(slotrange)
         this.freeslots=list(slotrange)
         this.usedslots=list()
