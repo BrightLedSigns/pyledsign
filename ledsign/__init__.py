@@ -82,17 +82,21 @@ class LedSignFactory(object):
     def initslots(this,slotrange):
         this.slotrange=list(slotrange)
         this.freeslots=list(slotrange)
+        this.usedslots=list()
 
     def setslot(this,slot):
         if slot == None:
             if len(this.freeslots) > 0:
-                return this.freeslots.pop(0)
+                newslot=this.freeslots.pop(0)
+                this.usedslots.append(newslot)
+                return newslot
             else:   
                 raise Exception('Out of slots')
         else:
             if slot in this.freeslots:
+                this.usedslots.append(slot)
                 this.freeslots.remove(slot) 
                 return slot
             else:
                 raise Exception('Slot [%s] not available' % str(slot))
-    
+

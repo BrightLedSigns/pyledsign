@@ -79,9 +79,6 @@ class MiniSign(LedSign):
             **params
         )
 
-    def getshowbits(this,**params):
-        pass
-
     def send(this,**params):
         from sys import hexversion
         from time import sleep
@@ -125,8 +122,7 @@ class MiniSign(LedSign):
             this.writeserial(barray(packet))
             sleep(params['packetdelay'])
 
-        bits=this.getshowbits(**params)
-        bits=1
+        bits=this.factory.getshowbits()
         if bits != 0:
             sys.stdout.write('writing runbits packet\n');
             this.writeserial(barray([0x02,0x33,bits]))
@@ -256,6 +252,14 @@ class MiniSignFactory(LedSignFactory):
             retval=pack('!H',msgref)
             this.chunkcache[chunk]=retval
         return retval
+
+    def getshowbits(this):
+        BITVALS={1:1, 2:2, 3:4, 4:8, 5:16, 6:32, 7:64, 8:128}
+        bits=0
+        for val in this.usedslots:
+            bits+=BITVALS[val]
+        sys.stdout.write('showbits is [%d]\n' % bits)
+        return bits
             
 
 class MiniSignMsg:
