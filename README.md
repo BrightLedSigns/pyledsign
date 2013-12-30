@@ -16,11 +16,15 @@ It has been tested on both Linux and Windows, and should theoretically run anywh
 
 ## SYNOPSIS
 
+    #
     # "MiniSign" is one specific model
+    # For a different model, like the m500, you
+    # would do:
+    #   from ledsign.m500sign import M500Sign
+    #
     from ledsign.minisign import MiniSign
     mysign = MiniSign(
         devicetype='sign',
-        port='/dev/ttyUSB0',
     ) 
     # addmsg queues a message to be sent with the send method
     mysign.addmsg(
@@ -32,7 +36,7 @@ It has been tested on both Linux and Windows, and should theoretically run anywh
 
 ## USAGE
 
-Since each of the supported signs is a bit different in terms of capability, the usage docs are within the documentation for each type of sign: (links aren't working yet)
+Since each of the supported signs is a bit different in terms of capability, the usage docs are within the documentation for each type of sign:
 
 - [MiniSign](minisign.md)
 - [M500Sign](m500sign.md)
