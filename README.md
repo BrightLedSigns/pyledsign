@@ -11,7 +11,7 @@ Version 1.00
 
 The pyledsign library is used to send text and graphics to different models of programmable LED signs. We tried to keep the interface consistent across models, and only introduced per-model variations where the underlying capabilities of the sign were different enough to warrant it.  
 
-It has been tested on both Linux and Windows, and should theoretically run anywhere were the pyserial library can run.  The pyserial library is a prerequisite, and allows the protocol messages to be sent via RS232(most common), but also over the network if the sign (or an external network to serial device) supports it. 
+It has been tested on both Linux and Windows, and should theoretically run anywhere were the [pyserial](http://pyserial.sourceforge.net/) library can run.  The pyserial library is a prerequisite, and allows the protocol messages to be sent via RS232(most common), but also over the network if the sign (or an external network to serial device) supports it. 
 
 
 # SYNOPSIS
