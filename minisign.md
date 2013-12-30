@@ -55,7 +55,7 @@ There is only one argument for the constructor...devicetype.  It's a mandatory a
 
 # METHODS
 
-## mysign.queuemsg
+## queuemsg
 
 This family of devices support a maximum of 8 messages that can be sent to the sign.  These messages can consist of three different types of content, which can be mixed together in the same message..plain text, pixmap images, and 2-frame animiated icons.
 
@@ -78,7 +78,7 @@ The queueMsg method returns a number that indicates how many messages have been 
          # generated
     }
 
-## mysign.queuepix
+## queuepix
 
 The queuepix method allow you to create simple, single color pixmaps that can be inserted into a message. There are two ways to create a picture.
 
@@ -135,9 +135,9 @@ a 0 won't.
 
 
 
-## mysign.queueicon
+## queueicon
 
-The mysign.queueicon method is almost identical to the mysign.queuepix method. 
+The queueicon method is almost identical to the queuepix method. 
 The queueicon method accepts either a 16x32 pixel image (for signs), or a 
 12x24 pixel image (for badges).  It internally splits the image down the middle
 into a left and right halves, each one being 16x16 (or 12x12) pixels.
