@@ -37,6 +37,12 @@ Since each of the supported signs is a bit different in terms of capability, the
 - [MiniSign](minisign.md)
 - [M500Sign](m500sign.md)
 
+## CAVEATS
+
+- It's possible to overrun the internal memory in a sign/badge by adding too many pixmaps or icons.  We do cache any occurances of identical 16x16 (or 12x12 for badges) blocks within images, which helps a bit.  If you do overrun the memory, you will likely stomp on the storage area for fonts.   Your sign will "work", but display garbled text. The original windows-based software that comes with the sign has functionality to reload the original contents of the memory.
+
+- The internal coding style of this module isn't very Pythonic.  We're trying to maintain this as a straight port of the original code, which was written in Perl.  This makes it easier to add features, fix bugs, etc. 
+
 ## AUTHOR
 
 Kerry Schwab, `<sales at brightledsigns.com>`
