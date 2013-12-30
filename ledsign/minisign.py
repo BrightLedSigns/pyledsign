@@ -2,6 +2,11 @@ import sys
 from ledsign import LedSign, LedSignFactory
 class MiniSign(LedSign):
     SLOTRANGE=range(1,9)
+    EFFECTMAP = dict(
+        hold=0x41, scroll=0x42, snow=0x43, 
+        flash=0x44, hold_flash=0x45
+    )
+    SPMAP = {1:0x31, 2:0x32, 3:0x33, 4:0x34, 5:0x35}
     def _init(this):
         if not hasattr(this,'devicetype'):
             raise Exception('Devicetype not supplied')
@@ -16,7 +21,7 @@ class MiniSign(LedSign):
     def _factory(this):
         return this.factory
 
-    def addpix(this,**params):
+    def queuepix(this,**params):
         if 'clipart' in params:
             ca=MiniSignClipart(
                 name=params.clipart,
@@ -36,7 +41,7 @@ class MiniSign(LedSign):
         return imagetag
 
 
-    def addicon(this,**params):
+    def queueicon(this,**params):
         if 'clipart' in params:
             ca=MiniSignClipart(
                 name=params.clipart,
@@ -52,7 +57,7 @@ class MiniSign(LedSign):
         )        
         return this.settag(iconobj)
 
-    def addmsg(this,**params):
+    def queuemsg(this,**params):
         maxmsg=len(this.factory.slotrange)
         #if this.msgcount > maxmsg:
         if 0 > maxmsg:
@@ -68,10 +73,10 @@ class MiniSign(LedSign):
         if params['speed'] < 1 or params['speed'] > 5:
             raise Exception('Parameter [speed] must be between 1 and 5')
             return None 
-        if not 'effects' in params:
+        if not 'effect' in params:
             params['effect']="scroll"
         else:
-            if not params['effect'] in EFFECTMAP:
+            if not params['effect'] in MiniSign.EFFECTMAP:
                 raise Exception('Invalid effect value ['+
                   params['effect'] + ']'
                 )
@@ -81,7 +86,7 @@ class MiniSign(LedSign):
             **params
         )
 
-    def send(this,**params):
+    def sendq(this,**params):
         from sys import hexversion
         from time import sleep
         from struct import pack
@@ -113,7 +118,6 @@ class MiniSign(LedSign):
             msgobj.data=this.processtags(msgobj.data)
             for packet in msgobj.codify():
                 mlen=len(packet)
-                sys.stdout.write('writing message packet [%d] bytes\n' % mlen)
                 this.writeserial(barray(packet))
                 # sleep to avoid overrunning serial buffers on the sign
                 sleep(params['packetdelay'])
@@ -266,9 +270,7 @@ class MiniSignFactory(LedSignFactory):
         else:   
             slotlist=this.usedslots
         for slot in slotlist:
-            sys.stdout.write('adding bitval [%d]\n' %slot)
             bits+=BITVALS[slot]
-        sys.stdout.write('showbits is [%d]\n' % bits)
         return bits
             
 
@@ -288,20 +290,15 @@ class MiniSignMsg:
 
     def codify(this):
         from struct import pack
-        SPMAP = {1:0x31, 2:0x32, 3:0x33, 4:0x34, 5:0x35}
-        EFFECTMAP = dict(
-            hold=0x41, scroll=0x42, snow=0x43, 
-            flash=0x44, hold_flash=0x45
-        )
-        if this.speed in SPMAP:
-            speed=SPMAP[this.speed]
+        if this.speed in MiniSign.SPMAP:
+            speed=MiniSign.SPMAP[this.speed]
         else:
-            speed=SPMAP[5]
+            speed=MiniSign.SPMAP[5]
 
-        if this.effect in EFFECTMAP:
-            effect=EFFECTMAP[this.effect]
+        if this.effect in MiniSign.EFFECTMAP:
+            effect=MiniSign.EFFECTMAP[this.effect]
         else:
-            effect=EFFECTMAP['hold']
+            effect=MiniSign.EFFECTMAP['hold']
 
         data=this.data
         mlen=len(data)
@@ -401,7 +398,7 @@ class MiniSignPixmap(MiniSignImage):
 
 class MiniSignIcon(MiniSignImage):
     def _init(this, **params):
-        this.objtype='image'
+        this.objtype='icon'
         for a,b in params.items():
             setattr(this,a,b)
         if this.devicetype == 'sign':
