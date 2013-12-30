@@ -32,7 +32,7 @@ It has been tested on both Linux and Windows, and should theoretically run anywh
 
 # USAGE
 
-Since each of the supported signs is a bit different in terms of capability, the usage docs are within the documentation for each type of sign:
+Since each of the supported signs is a bit different in terms of capability, the usage docs are within the documentation for each type of sign: (links aren't working yet)
 
 - [MiniSign](minisign.md)
 - [M500Sign](m500sign.md)
