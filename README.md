@@ -1,20 +1,20 @@
-# NAME
+# pyledsign 
 
 pyledsign - Python library to communicate with various models of programmable LED signs
  
 
-# VERSION
+## VERSION
 
 Version 1.00
 
-# DESCRIPTION
+## DESCRIPTION
 
 The pyledsign library is used to send text and graphics to different models of programmable LED signs. We tried to keep the interface consistent across models, and only introduced per-model variations where the underlying capabilities of the sign were different enough to warrant it.  
 
 It has been tested on both Linux and Windows, and should theoretically run anywhere were the [pyserial](http://pyserial.sourceforge.net/) library can run.  The pyserial library is a prerequisite, and allows the protocol messages to be sent via RS232(most common), but also over the network if the sign (or an external network to serial device) supports it. 
 
 
-# SYNOPSIS
+## SYNOPSIS
 
     # "MiniSign" is one specific model
     from ledsign.minisign import MiniSign
@@ -30,14 +30,14 @@ It has been tested on both Linux and Windows, and should theoretically run anywh
         device='/dev/ttyUSB0'
     )
 
-# USAGE
+## USAGE
 
 Since each of the supported signs is a bit different in terms of capability, the usage docs are within the documentation for each type of sign: (links aren't working yet)
 
 - [MiniSign](minisign.md)
 - [M500Sign](m500sign.md)
 
-# AUTHOR
+## AUTHOR
 
 Kerry Schwab, `<sales at brightledsigns.com>`
 
@@ -49,7 +49,7 @@ Inspiration from similar work:
 - [https://github.com/ajesler/ledbadge-rb](https://github.com/ajesler/ledbadge-rb) - Python library that appears to be targeting signs with a very similar protocol to our Mini LED signs and badges. 
 
 
-# LICENSE AND COPYRIGHT
+## LICENSE AND COPYRIGHT
 
 Copyright (c) 2013 Kerry Schwab & Bright Signs
 All rights reserved.
