@@ -24,13 +24,13 @@ It has been tested on both Linux and Windows, and should theoretically run anywh
     #
     from ledsign.minisign import MiniSign
     mysign = MiniSign(
-        devicetype='sign',
+        devicetype='sign' 
     ) 
-    # addmsg queues a message to be sent with the send method
-    mysign.addmsg(
+    # queuemsg queues a message to be sent with the send method
+    mysign.queuemsg(
         data='Hello world!'
     )
-    mysign.send(
+    mysign.sendq(
         device='/dev/ttyUSB0'
     )
 
