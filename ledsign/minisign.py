@@ -86,7 +86,7 @@ class MiniSign(LedSign):
             **params
         )
 
-    def sendq(this,**params):
+    def sendqueue(this,**params):
         from sys import hexversion
         from time import sleep
         from struct import pack
@@ -136,6 +136,93 @@ class MiniSign(LedSign):
             this.writeserial(barray([0x02,0x33,bits]))
         this.serialclose()
 
+    def sendcmd(this, **params):
+        from datetime import datetime
+        from struct import pack
+        validcmds='runslots','settime','setcountdown' 
+        if not params['cmd'] in validcmds:
+            raise Exception('Unsupported cmd [%s]' % params['cmd'])
+        else:
+            cmd=params['cmd']
+        if cmd == "runslots":
+            pass
+        if cmd == "settime":
+            if not 'value' in params:
+                raise Exception('Value is required for settime')
+            data=pack('BB',0x02,0x34)
+            t=datetime.fromtimestamp(params['value'])
+            y2=str(t.year)[-2:]
+            sys.stdout.write('year is [%s]' % y2)
+            data+=pack('B',int(str(t.year)[-2:],16))
+            wd=t.weekday();
+            if (wd == 6):
+                wd=0
+            else:
+                wd+=1
+            tl=[int(str(n),16) for n in [t.month,
+                t.day,t.hour,t.minute,t.second,wd]]
+            data+=pack('BBBBBB',*tl)
+            this.senddata(checksum=1, data=data, **params)
+
+        if cmd == "setcountdown":
+            from datetime import datetime
+            from struct import pack
+            if not 'value' in params:
+                raise Exception('Value is required for settime')
+            data=pack('BB',0x02,0x36)
+            t=datetime.fromtimestamp(params['value'])
+            s=datetime.strptime("01/01/2000","%m/%d/%Y");
+            delta=t-s
+            data+=pack('!h',delta.days)
+            data+=pack('BBBBB',t.hour,t.minute,t.second,0x00,0x00) 
+            this.senddata(checksum=1, data=data, **params)
+
+    def senddata(this, **params):     
+        from struct import pack
+        from time import sleep
+        if sys.hexversion < 0x02060000:
+            def barray(n): return(n)
+        else:   
+            def barray(n): return(bytearray(n))
+
+        if not 'data' in params:
+            raise Exception('Parameter [data] must be supplied')
+        else:
+            data=params['data']
+
+        if 'checksum' in params:
+            csum=0
+            # checksum
+            for char in list(barray(data))[1:]:
+                # workaround for <= python2.5 has no bytearray
+                if sys.hexversion < 0x02060000:
+                    csum+=ord(char)
+                else:   
+                    csum+=char
+            csum%=256
+            data+=pack('B',csum % 256)
+
+        if not 'device' in params:
+            raise Exception('Parameter [device] must be supplied')
+        if not 'baudrate' in params:
+            params['baudrate']=38400
+        if not 'packetday' in params:
+            params['packetdelay']=0.20
+        else:
+            params['packetdelay']=float(params['packetdelay'])
+        this.connectserial(
+            device=params['device'],
+            baudrate=params['baudrate'],
+        )
+        #import subprocess
+        #p=subprocess.Popen(['/usr/bin/hd'],shell=False,stdin=subprocess.PIPE)
+        #print p.communicate(data)
+        this.writeserial(barray(data))
+        this.serialclose()
+        sleep(params['packetdelay'])
+
+        
+
     def packets(this):
         blob=''.join(this.factory.chunks)
         blen=len(blob)
@@ -165,6 +252,7 @@ class MiniSign(LedSign):
         return packets
 
     def processtags(this,data):
+        import re
         from struct import pack
         if this.devicetype == "badge":
             normal=pack('BB',0xff,0x80)
@@ -180,21 +268,34 @@ class MiniSign(LedSign):
         # latin-1 has an encoding for all single bytes values
         # from 0-255.  It's ugly, but works
         #
+
+        # handle flashing tags
         if sys.hexversion < 0x03000000:
             data=data.replace('<f:normal>',normal)
             data=data.replace('<f:flash>',flash)
         else:   
             data=data.replace('<f:normal>',str(normal,'latin-1'))
             data=data.replace('<f:flash>',str(flash,'latin-1'))
-    
-        import re
+   
+        # handle image tags 
         for match in re.findall(r'(<i:\d+>)',data):
             if sys.hexversion < 0x03000000:
                 data=data.replace(match,this.gettag(match))
             else:
                 data=data.replace(match,str(this.gettag(match),'latin-1'))
-        return data
+        dtags={
+            '%y' : '\DY', '%d' : '\DD', '%m' : '\DL', 
+            '%H' : '\DH', '%M' : '\DM', '%S' : '\DS',
+            '%1' : '\D1', '%2' : '\D2', '%3' : '\D3',
+            '%4' : '\D4'
+        }
+        for match in re.findall(r'<d:([^>]+)>',data):
+            repl=match
+            for tag in re.findall(r'(%[ydmHMS1234])',match):
+                repl=repl.replace(tag,dtags[tag])
+            data=data.replace('<d:%s>' % match, repl)
 
+        return data
 
 class MiniSignFactory(LedSignFactory):
 

@@ -28,12 +28,12 @@ Version 1.00
     )
     #
     # send the message to the sign via the serial port
-    #   note that the sendq() method does not empty
+    #   note that the sendqueue() method does not empty
     #   the buffer, so if we have a second sign, on a 
     #   different serial port, we can send everything
     #   to it as well...
     #
-    mysign.sendq(
+    mysign.sendqueue(
         device='/dev/ttyUSB0'
     )
 
@@ -129,7 +129,7 @@ a 0 won't.
     mysign.queuemsg(
         data="a 5 pixel box: %s" % pic
     );
-    mysign.sendq(
+    mysign.sendqueue(
         device='/dev/ttyUSB0'
     )
 
@@ -193,14 +193,14 @@ You can "roll your own" icons as well.
     mysign.queuemsg(
         data="Flashing Icon: [%s]" % icon
     )
-    mysign.sendq(
+    mysign.sendqueue(
         device='/dev/ttyUSB0'
     )
     
-## sendq
+## sendqueue
 
 
-The sendq method connects to the sign over RS232 and sends all the data accumulated from prior use of the queuemsg/Pix/Icon methods.  The only mandatory argument is 'device', denoting which serial device to send to.  
+The sendqueue method connects to the sign over RS232 and sends all the data accumulated from prior use of the queuemsg/Pix/Icon methods.  The only mandatory argument is 'device', denoting which serial device to send to.  
 
 It supports three optional arguments: runslots, baudrate, and packetdelay:
 
@@ -213,16 +213,16 @@ It supports three optional arguments: runslots, baudrate, and packetdelay:
 Some examples:
 
     # typical use on a windows machine
-    mysign.sendq(
+    mysign.sendqueue(
         device='COM4'
     );
     # typical use on a unix/linux machine
-    mysign.sendq(
+    mysign.sendqueue(
         device='/dev/ttyUSB0'
     );
     # using optional arguments, set baudrate to 9600, and sleep 1/2 a second
     # between sending packets.  
-    mysign.sendq(
+    mysign.sendqueue(
         device='COM8',
         baudrate='9600',
         packetdelay=0.5
@@ -231,14 +231,14 @@ Some examples:
 Note that if you have multiple connected signs, you can send to them without creating a new object:
 
     # send to the first sign
-    mysign.sendq(device='COM4');
+    mysign.sendqueue(device='COM4');
     # send to another sign
-    mysign.sendq(device='COM6');
+    mysign.sendqueue(device='COM6');
     # send to a badge connected on COM7
     #   this works fine for plain text, but won't work well for
     #   pictures and icons...you'll have to create a new
     #   sign object with devicetype "badge" for them to render correctly
-    mysign.sendq(device='COM7'); 
+    mysign.sendqueue(device='COM7'); 
 
 # AUTHOR
 
