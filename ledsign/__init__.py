@@ -32,7 +32,7 @@ class LedSign(object):
                     timeout=params['timeout']
                 )
             except serial.serialutil.SerialException:
-                e-sys.exc_info()[1]
+                e=sys.exc_info()[1]
                 raise Exception('Can\'t open serial port: [' + str(e) + ']\n')
 
     def writeserial(this,data):
