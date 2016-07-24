@@ -5,7 +5,7 @@ MiniSign - Part of the pyledsign python library used to send text and graphics t
 
 # VERSION
 
-Version 1.00
+Version 1.01
 
 # SYNOPSIS
 
@@ -13,7 +13,6 @@ Version 1.00
     from ledsign.minisign import MiniSign
     mysign = MiniSign(
         devicetype='sign',
-        port='/dev/ttyUSB0',
     )
     # queue up a text message
     mysign.queuemsg(

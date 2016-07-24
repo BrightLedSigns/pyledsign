@@ -5,7 +5,7 @@ pyledsign - Python library to communicate with various models of programmable LE
 
 ## VERSION
 
-Version 1.00
+Version 1.01
 
 ## DESCRIPTION
 
@@ -30,7 +30,7 @@ It has been tested on both Linux and Windows, and should theoretically run anywh
     mysign.queuemsg(
         data='Hello world!'
     )
-    mysign.sendq(
+    mysign.sendqueue(
         device='/dev/ttyUSB0'
     )
 

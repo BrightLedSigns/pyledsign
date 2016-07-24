@@ -59,7 +59,12 @@ class MiniSign(LedSign):
 
     def queuemsg(this,**params):
         maxmsg=len(this.factory.slotrange)
-        #if this.msgcount > maxmsg:
+        if not 'speed' in params:
+            params['speed']=5
+        if not 'effect' in params:
+            params['effect']='scroll'
+        speed=int(params['speed'])
+        params['speed']=speed
         if 0 > maxmsg:
             raise Exception('Maximim message count of '+maxmsg+' is already'+
                 ' reached, discarding new message')
@@ -67,15 +72,10 @@ class MiniSign(LedSign):
         if not 'data' in params:
             raise Exception('Parameter [data] must be present')
             return None
-        if not 'speed' in params:
-            params['speed']=5
-        params['speed']=int(params['speed'])
         if params['speed'] < 1 or params['speed'] > 5:
             raise Exception('Parameter [speed] must be between 1 and 5')
             return None 
-        if not 'effect' in params:
-            params['effect']="scroll"
-        else:
+        if 'effect' in params:
             if not params['effect'] in MiniSign.EFFECTMAP:
                 raise Exception('Invalid effect value ['+
                   params['effect'] + ']'
@@ -152,7 +152,6 @@ class MiniSign(LedSign):
             data=pack('BB',0x02,0x34)
             t=datetime.fromtimestamp(params['value'])
             y2=str(t.year)[-2:]
-            sys.stdout.write('year is [%s]' % y2)
             data+=pack('B',int(str(t.year)[-2:],16))
             wd=t.weekday();
             if (wd == 6):
