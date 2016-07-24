@@ -20,9 +20,9 @@ It has been tested on both Linux and Windows, and should theoretically run anywh
     # "MiniSign" is one specific model
     # For a different model, like the m500, you
     # would do:
-    #   from ledsign.m500sign import M500Sign
+    #   from pyledsign.m500sign import M500Sign
     #
-    from ledsign.minisign import MiniSign
+    from pyledsign.minisign import MiniSign
     mysign = MiniSign(
         devicetype='sign' 
     ) 

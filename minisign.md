@@ -10,7 +10,7 @@ Version 1.01
 # SYNOPSIS
 
     #!/usr/bin/python
-    from ledsign.minisign import MiniSign
+    from pyledsign.minisign import MiniSign
     mysign = MiniSign(
         devicetype='sign',
     )
@@ -44,7 +44,7 @@ MiniSign is used to send text and graphics via RS232 to our smaller set of LED S
 
 There is only one argument for the constructor...devicetype.  It's a mandatory argument and is used to denote if we're talking a sign (16 pixels high) or a badge (12 pixels high).
 
-    from ledsign.minisign import MiniSign
+    from pyledsign.minisign import MiniSign
     mysign = MiniSign(
         devicetype='sign'
     )
@@ -108,7 +108,7 @@ __data__ : a string of 1's and 0's, where the 1 will light up the pixel and
 a 0 won't.  
 
     #!/usr/bin/python
-    from ledsign.minisign import MiniSign
+    from pyledsign.minisign import MiniSign
     mysign = MiniSign(
         devicetype='sign',
         port='/dev/ttyUSB0',
@@ -157,7 +157,7 @@ You can "roll your own" icons as well.
 
     # make an animated icon that alternates between a big box and a small box
     import string
-    from ledsign.minisign import MiniSign
+    from pyledsign.minisign import MiniSign
     mysign = MiniSign(
         devicetype='sign',
         port='/dev/ttyUSB0' 
