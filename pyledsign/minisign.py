@@ -1,5 +1,5 @@
 import sys
-from ledsign import LedSign, LedSignFactory
+from pyledsign import LedSign, LedSignFactory
 class MiniSign(LedSign):
     SLOTRANGE=range(1,9)
     EFFECTMAP = dict(
